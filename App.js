@@ -28,8 +28,7 @@ export default function App() {
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
       {/* <LoginScreen title="Login Screen" /> */}
-      <RegistrationScreen title="Registration Screen" />
-      {/* <Text>Open up App.js to start working on your app!</Text> */}
+      <RegistrationScreen title="Registration Screen" />      
       <StatusBar style="auto" />
     </View>
   );
