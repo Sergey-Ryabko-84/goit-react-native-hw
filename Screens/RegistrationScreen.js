@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     paddingTop: 92,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
-    fontFamily: "Roboto-Regular",
+    // fontFamily: "Roboto-Regular",
   },
   fotoWrapper: {
     position: "absolute",
@@ -183,9 +183,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6C00",
   },
   title: {
-    fontFamily: "Roboto-Medium",
+    // fontFamily: "Roboto-Medium",
     fontSize: 30,
-    fontWeight: 500,
+    // fontWeight: 500,
     color: "#212121",
     marginBottom: 32,
   },
