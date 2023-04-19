@@ -13,7 +13,7 @@ import {
   Alert,
 } from "react-native";
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({ navigation }) => {
   const [isFocusedLogin, setIsFocusedLogin] = useState(false);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPass, setIsFocusedPass] = useState(false);
@@ -24,11 +24,14 @@ const RegistrationScreen = () => {
 
   const passDisplayToggle = () => setPassDisplay((prevState) => !prevState);
 
-  const onLogin = () => {
+  const onSignUp = () => {
     if (login && email && password) {
-      return console.log("login", login, "email:", email, "password:", password);
+      console.log("login", login, "email:", email, "password:", password);
+      return navigation.navigate("Home");
     }
     Alert.alert("Please, fill in all fields!");
+
+    navigation.navigate("Home");
   };
 
   return (
@@ -104,7 +107,7 @@ const RegistrationScreen = () => {
               </Pressable>
             </View>
             <Pressable
-              onPress={onLogin}
+              onPress={onSignUp}
               style={({ pressed }) => [
                 { backgroundColor: pressed ? "#EA5700" : "#FF6C00" },
                 styles.button,
@@ -118,14 +121,19 @@ const RegistrationScreen = () => {
                 {
                   marginBottom:
                     isFocusedLogin || isFocusedEmail || isFocusedPass
-                      ? -130
+                      ? -104
                       : 45,
                 },
               ]}
             >
-              <Text style={styles.loginLink}>
-                Already have an account? Sign in
-              </Text>
+              <Pressable
+                onPress={() => navigation.navigate("Login")}
+                style={styles.loginLink}
+              >
+                <Text style={styles.loginLinkText}>
+                  Already have an account? Sign in
+                </Text>
+              </Pressable>
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -219,7 +227,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginTop: 27,
-    marginBottom: 16,
+    marginBottom: 12,
     padding: 16,
     borderRadius: 25,
   },
@@ -231,6 +239,9 @@ const styles = StyleSheet.create({
     marginBottom: 110,
   },
   loginLink: {
+    padding: 4,
+  },
+  loginLinkText: {
     color: "#1B4371",
     fontSize: 16,
   },

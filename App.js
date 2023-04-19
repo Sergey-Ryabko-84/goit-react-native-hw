@@ -1,10 +1,9 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import LoginScreen from "./Screens/LoginScreen";
-import RegistrationScreen from "./Screens/RegistrationScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { StyleSheet, View } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback } from "react";
+import Router from "./router";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,11 +25,11 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
-      {/* <LoginScreen title="Login Screen" /> */}
-      <RegistrationScreen title="Registration Screen" />      
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <View style={styles.container} onLayout={onLayoutRootView}>
+        <Router/>
+      </View>
+    </NavigationContainer>
   );
 }
 
