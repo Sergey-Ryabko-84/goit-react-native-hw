@@ -1,19 +1,9 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { StatusBar } from "expo-status-bar";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect, useState, useCallback } from "react";
-import LoginScreen from "./screens/LoginScreen";
-import RegistrationScreen from "./screens/RegistrationScreen";
-import Home from "./screens/Home";
-import PostsScreen from "./screens/PostsScreen";
-import CreatePostsScreen from "./screens/CreatePostsScreen";
-import CommentsScreen from "./screens/CommentsScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import MapScreen from "./screens/MapScreen";
-import LogOut from "./components/LogOut";
+import { useCallback } from "react";
+import Router from "./router";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -34,40 +24,10 @@ export default function App() {
     return null;
   }
 
-  const Stack = createStackNavigator();
-
   return (
     <NavigationContainer>
       <View style={styles.container} onLayout={onLayoutRootView}>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RegistrationScreen"
-            component={RegistrationScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PostsScreen"
-            component={PostsScreen}
-            options={{ headerRight: () => <LogOut /> }}
-          />
-          <Stack.Screen
-            name="CreatePostsScreen"
-            component={CreatePostsScreen}
-          />
-          <Stack.Screen name="CommentsScreen" component={CommentsScreen} />
-          <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-          <Stack.Screen name="MapScreen" component={MapScreen} />
-        </Stack.Navigator>
+        <Router/>
       </View>
     </NavigationContainer>
   );

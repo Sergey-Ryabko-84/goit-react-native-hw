@@ -96,7 +96,7 @@ const LoginScreen = ({ navigation }) => {
               ]}
             >
               <Pressable
-                onPress={() => navigation.navigate("RegistrationScreen")}
+                onPress={() => navigation.navigate("Registration")}
                 style={styles.signUpLink}
               >
                 <Text style={styles.signUpLinkText}>

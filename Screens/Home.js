@@ -18,11 +18,11 @@ const Home = () => {
         tabBarIcon: ({ focused, color }) => {
           let iconName;
 
-          if (route.name === "PostsScreen") {
+          if (route.name === "Posts") {
             iconName = "view-grid-outline";
-          } else if (route.name === "CreatePostsScreen") {
+          } else if (route.name === "CreatePosts") {
             iconName = "plus";
-          } else if (route.name === "ProfileScreen") {
+          } else if (route.name === "Profile") {
             iconName = "account-outline";
           }
 
@@ -40,12 +40,12 @@ const Home = () => {
       })}
     >
       <Tabs.Screen
-        name="PostsScreen"
+        name="Posts"
         component={PostsScreen}
         options={{ headerRight: () => <LogOut /> }}
       />
-      <Tabs.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
-      <Tabs.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Tabs.Screen name="CreatePosts" component={CreatePostsScreen} />
+      <Tabs.Screen name="Profile" component={ProfileScreen} />
     </Tabs.Navigator>
   );
 };
