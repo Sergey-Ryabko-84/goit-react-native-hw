@@ -13,7 +13,7 @@ import {
   Alert,
 } from "react-native";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPass, setIsFocusedPass] = useState(false);
   const [passDisplay, setPassDisplay] = useState(true);
@@ -24,9 +24,10 @@ const LoginScreen = () => {
 
   const onLogin = () => {
     if (email && password) {
-      return console.log("email:", email, "password:", password);
-    };
-    Alert.alert("Please, fill in all fields!");
+      console.log("email:", email, "password:", password);
+      return navigation.navigate("Home");
+    }
+    Alert.alert("Please, fill in all fields!");    
   };
 
   return (
@@ -91,12 +92,17 @@ const LoginScreen = () => {
             <View
               style={[
                 styles.subscribe,
-                { marginBottom: isFocusedEmail || isFocusedPass ? -130 : 110 },
+                { marginBottom: isFocusedEmail || isFocusedPass ? -136 : 110 },
               ]}
             >
-              <Text style={styles.loginLink}>
-                Don't have an account? Sign up
-              </Text>
+              <Pressable
+                onPress={() => navigation.navigate("RegistrationScreen")}
+                style={styles.signUpLink}
+              >
+                <Text style={styles.signUpLinkText}>
+                  Don't have an account? Sign up
+                </Text>
+              </Pressable>
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -157,7 +163,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginTop: 27,
-    marginBottom: 16,
+    marginBottom: 12,
     padding: 16,
     borderRadius: 25,
   },
@@ -168,7 +174,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 110,
   },
-  loginLink: {
+  signUpLink: {
+    padding: 4,
+  },
+  signUpLinkText: {
     color: "#1B4371",
     fontSize: 16,
   },

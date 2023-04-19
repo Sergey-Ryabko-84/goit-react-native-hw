@@ -1,6 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 
-const CommentsScreen = () => {};
+const CommentsScreen = () => {
+    return (
+      <View>
+        <Text>CommentsScreen</Text>
+      </View>
+    );
+};
 
 const styles = StyleSheet.create({});
 

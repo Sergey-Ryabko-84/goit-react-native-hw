@@ -4,7 +4,13 @@ import {
   View,
 } from "react-native";
 
-const PostsScreen = () => {};
+const PostsScreen = () => {
+  return (
+    <View>
+      <Text>PostsScreen</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({})
 

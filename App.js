@@ -1,19 +1,19 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState, useCallback } from "react";
-import LoginScreen from "./Screens/LoginScreen";
-import RegistrationScreen from "./Screens/RegistrationScreen";
-import Home from "./Screens/Home";
-import PostsScreen from "./Screens/PostsScreen";
-import CreatePostsScreen from "./Screens/CreatePostsScreen";
-import CommentsScreen from "./Screens/CommentsScreen";
-import ProfileScreen from "./Screens/ProfileScreen";
-import MapScreen from "./Screens/MapScreen";
-
+import LoginScreen from "./screens/LoginScreen";
+import RegistrationScreen from "./screens/RegistrationScreen";
+import Home from "./screens/Home";
+import PostsScreen from "./screens/PostsScreen";
+import CreatePostsScreen from "./screens/CreatePostsScreen";
+import CommentsScreen from "./screens/CommentsScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import MapScreen from "./screens/MapScreen";
+import LogOut from "./components/LogOut";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,14 +39,27 @@ export default function App() {
   return (
     <NavigationContainer>
       <View style={styles.container} onLayout={onLayoutRootView}>
-        <Stack.Navigator>
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="RegistrationScreen"
             component={RegistrationScreen}
+            options={{ headerShown: false }}
           />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="PostsScreen" component={PostsScreen} />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PostsScreen"
+            component={PostsScreen}
+            options={{ headerRight: () => <LogOut /> }}
+          />
           <Stack.Screen
             name="CreatePostsScreen"
             component={CreatePostsScreen}
@@ -55,9 +68,6 @@ export default function App() {
           <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           <Stack.Screen name="MapScreen" component={MapScreen} />
         </Stack.Navigator>
-        {/* <LoginScreen title="Login Screen" /> */}
-        {/* <RegistrationScreen title="Registration Screen" /> */}
-        {/* <StatusBar style="auto" /> */}
       </View>
     </NavigationContainer>
   );
