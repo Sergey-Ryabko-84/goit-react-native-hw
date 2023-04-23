@@ -8,7 +8,7 @@ import MapScreen from "./screens/MapScreen";
 const Stack = createStackNavigator();
 
 const Router = () => {
-  const isLogedIn = null;
+  const isLogedIn = 1;
 
   if (!isLogedIn) {
     return (
@@ -38,8 +38,8 @@ const Router = () => {
           component={Home}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="CommentsScreen" component={CommentsScreen} />
-        <Stack.Screen name="MapScreen" component={MapScreen} />
+        <Stack.Screen name="Comments" component={CommentsScreen} />
+        <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>
     );
   }

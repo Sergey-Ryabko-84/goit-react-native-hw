@@ -1,11 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 const CommentsScreen = () => {
-    return (
-      <View>
-        <Text>CommentsScreen</Text>
-      </View>
-    );
+  return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <Text>CommentsScreen</Text>
+    </TouchableWithoutFeedback>
+  );
 };
 
 const styles = StyleSheet.create({});

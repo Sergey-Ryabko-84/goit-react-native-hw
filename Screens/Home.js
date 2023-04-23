@@ -1,14 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import LogOut from "../components/LogOut";
+import GoBack from "../components/goBack";
 
 const Tabs = createBottomTabNavigator();
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
@@ -44,7 +45,14 @@ const Home = () => {
         component={PostsScreen}
         options={{ headerRight: () => <LogOut /> }}
       />
-      <Tabs.Screen name="CreatePosts" component={CreatePostsScreen} />
+      <Tabs.Screen
+        name="CreatePosts"
+        component={CreatePostsScreen}
+        options={{
+          tabBarStyle: { display: "none" },
+          headerLeft: () => <GoBack navigation={navigation} />,
+        }}
+      />
       <Tabs.Screen name="Profile" component={ProfileScreen} />
     </Tabs.Navigator>
   );

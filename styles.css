@@ -1,0 +1,7 @@
+div {
+    border-radius: 8;
+    align-self: self-start;
+    overflow: hidden;
+    border-bottom: 1px solid #000;
+    text-decoration-line: underline;
+}
