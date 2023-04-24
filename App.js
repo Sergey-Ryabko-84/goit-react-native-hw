@@ -1,8 +1,10 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { Provider } from "react-redux";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useCallback } from "react";
+import { store } from "./redux/store";
 import Router from "./router";
 
 SplashScreen.preventAutoHideAsync();
@@ -25,11 +27,13 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <View style={styles.container} onLayout={onLayoutRootView}>
-        <Router/>
-      </View>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <View style={styles.container} onLayout={onLayoutRootView}>
+          <Router />
+        </View>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

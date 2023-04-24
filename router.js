@@ -8,7 +8,7 @@ import MapScreen from "./screens/MapScreen";
 const Stack = createStackNavigator();
 
 const Router = () => {
-  const isLogedIn = 1;
+  const isLogedIn = false;
 
   if (!isLogedIn) {
     return (
