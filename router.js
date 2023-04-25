@@ -27,11 +27,6 @@ const Router = () => {
           component={RegistrationScreen}
           options={{ headerShown: false }}
         />
-        {/* <Stack.Screen // temp Stack
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
-        /> */}
       </Stack.Navigator>
     );
   } else {

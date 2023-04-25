@@ -32,7 +32,7 @@ export const singUp = createAsyncThunk(
       };
     } catch (error) {
       console.log(error);
-      if (`${error}`.includes("auth/email-already-in-use")) {
+      if (`${error}`.includes("email-already-in-use")) {
         alert("this email is already in use");
       }
       return rejectWithValue(error.message);
@@ -61,6 +61,12 @@ export const singIn = createAsyncThunk(
       };
     } catch (error) {
       console.log(error);
+      if (
+        `${error}`.includes("invalid-email") ||
+        `${error}`.includes("wrong-password")
+      ) {
+        alert("email and/or password are wrong");
+      }
       return rejectWithValue(error.message);
     }
   }
@@ -73,17 +79,6 @@ export const singOut = createAsyncThunk(
       const auth = getAuth();
       await signOut(auth);
       console.log("signOut");
-    } catch (error) {
-      console.log(error);
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const _ = createAsyncThunk(
-  "auth/_",
-  async (credentials, { rejectWithValue }) => {
-    try {
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.message);

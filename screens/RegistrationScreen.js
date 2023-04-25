@@ -34,7 +34,6 @@ const RegistrationScreen = ({ navigation }) => {
     console.log("login", login, "email:", email, "password:", password);
     const avatar = "https://cdn-icons-png.flaticon.com/512/3607/3607444.png";
     dispatch(singUp({ login, email, password, avatar }));
-    // return navigation.navigate("Home");
   };
 
   return (

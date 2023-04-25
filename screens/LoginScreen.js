@@ -32,7 +32,6 @@ const LoginScreen = ({ navigation }) => {
 
     console.log("email:", email, "password:", password);
     dispatch(singIn({ email, password }));
-    return navigation.navigate("Home");
   };
 
   return (

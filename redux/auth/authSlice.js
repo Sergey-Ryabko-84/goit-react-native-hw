@@ -1,0 +1,66 @@
+import { createSlice } from "@reduxjs/toolkit";
+import { singIn, singOut, singUp } from "./authOperations";
+
+const initialState = {
+  id: null,
+  name: null,
+  email: null,
+  avatar: null,
+  token: null,
+  isLogedIn: false,
+  error: null,
+};
+
+export const authSlice = createSlice({
+  name: "auth",
+  initialState: initialState,
+  extraReducers: (builder) =>
+    builder
+      .addCase(singUp.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(singUp.fulfilled, (state, { payload }) => {
+        console.log(payload);
+        state.id = payload.id;
+        state.name = payload.name;
+        state.email = payload.email;
+        state.avatar = payload.avatar;
+        state.token = payload.token;
+        state.isLogedIn = true;
+      })
+      .addCase(singUp.rejected, (state, { payload }) => {
+        console.log(payload);
+        state.error = payload;
+      })
+      .addCase(singIn.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(singIn.fulfilled, (state, { payload }) => {
+        console.log(payload);
+        state.id = payload.id;
+        state.name = payload.name;
+        state.email = payload.email;
+        state.avatar = payload.avatar;
+        state.token = payload.token;
+        state.isLogedIn = true;
+      })
+      .addCase(singIn.rejected, (state, { payload }) => {
+        console.log(payload);
+        state.error = payload;
+      })
+      .addCase(singOut.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(singOut.fulfilled, (state) => {
+        state.id = null;
+        state.name = null;
+        state.email = null;
+        state.avatar = null;
+        state.token = null;
+        state.isLogedIn = false;
+      })
+      .addCase(singOut.rejected, (state, { payload }) => {
+        console.log(payload);
+        state.error = payload;
+      }),
+});
