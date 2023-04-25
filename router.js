@@ -1,14 +1,18 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { useSelector } from "react-redux";
 import LoginScreen from "./screens/LoginScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import Home from "./screens/Home";
 import CommentsScreen from "./screens/CommentsScreen";
 import MapScreen from "./screens/MapScreen";
+import { selectAuth } from "./redux/auth/authSelectors";
 
 const Stack = createStackNavigator();
 
 const Router = () => {
-  const isLogedIn = false;
+  const { isLogedIn } = useSelector(selectAuth);
+  const auth = useSelector(selectAuth);
+  console.log(auth);
 
   if (!isLogedIn) {
     return (
@@ -23,11 +27,11 @@ const Router = () => {
           component={RegistrationScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen // temp Stack
+        {/* <Stack.Screen // temp Stack
           name="Home"
           component={Home}
           options={{ headerShown: false }}
-        />
+        /> */}
       </Stack.Navigator>
     );
   } else {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   ImageBackground,
@@ -12,6 +13,7 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
+import { singUp } from "../redux/auth/authOperations";
 
 const RegistrationScreen = ({ navigation }) => {
   const [isFocusedLogin, setIsFocusedLogin] = useState(false);
@@ -21,17 +23,18 @@ const RegistrationScreen = ({ navigation }) => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const passDisplayToggle = () => setPassDisplay((prevState) => !prevState);
 
   const onSignUp = () => {
-    if (login && email && password) {
-      console.log("login", login, "email:", email, "password:", password);
-      return navigation.navigate("Home");
+    if (!(login && email && password)) {
+          Alert.alert("Please, fill in all fields!");
     }
-    Alert.alert("Please, fill in all fields!");
-
-    navigation.navigate("Home");
+    console.log("login", login, "email:", email, "password:", password);
+    const avatar = "https://cdn-icons-png.flaticon.com/512/3607/3607444.png";
+    dispatch(singUp({ login, email, password, avatar }));
+    // return navigation.navigate("Home");
   };
 
   return (

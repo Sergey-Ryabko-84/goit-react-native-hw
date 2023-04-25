@@ -6,6 +6,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { store } from "./redux/store";
 import Router from "./router";
+import "./firebase/config"
 
 SplashScreen.preventAutoHideAsync();
 
