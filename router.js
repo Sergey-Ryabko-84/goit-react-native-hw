@@ -1,18 +1,45 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { selectAuth } from "./redux/auth/authSelectors";
 import LoginScreen from "./screens/LoginScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import Home from "./screens/Home";
 import CommentsScreen from "./screens/CommentsScreen";
 import MapScreen from "./screens/MapScreen";
-import { selectAuth } from "./redux/auth/authSelectors";
+import { refreshUser } from "./redux/auth/authSlice";
 
 const Stack = createStackNavigator();
 
 const Router = () => {
+  const authState = useSelector(selectAuth);
+  console.log("authState: ", authState);
+
   const { isLogedIn } = useSelector(selectAuth);
-  const auth = useSelector(selectAuth);
-  console.log(auth);
+  const dispatch = useDispatch();
+  const auth = getAuth();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log("onAuthStateChanged user: ", user);
+      if (user) {
+        const { uid, displayName, email, photoURL, accessToken } = user;
+        dispatch(
+          refreshUser({
+            id: uid,
+            name: displayName,
+            email: email,
+            avatar: photoURL,
+            token: accessToken,
+          })
+        );
+      } else {
+        console.log("User is signed out");
+      }
+    });
+  }, [])
+  
 
   if (!isLogedIn) {
     return (

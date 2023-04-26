@@ -14,13 +14,25 @@ const initialState = {
 export const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
+  reducers: {
+    refreshUser: (state, { payload }) => {
+      console.log("refreshUser payload: ", payload);
+      state.id = payload.id;
+      state.name = payload.name;
+      state.email = payload.email;
+      state.avatar = payload.avatar;
+      state.token = payload.token;
+      state.isLogedIn = true;
+      state.error = null;
+    }
+  },
   extraReducers: (builder) =>
     builder
       .addCase(singUp.pending, (state) => {
         state.error = null;
       })
       .addCase(singUp.fulfilled, (state, { payload }) => {
-        console.log(payload);
+        // console.log(payload);
         state.id = payload.id;
         state.name = payload.name;
         state.email = payload.email;
@@ -29,14 +41,14 @@ export const authSlice = createSlice({
         state.isLogedIn = true;
       })
       .addCase(singUp.rejected, (state, { payload }) => {
-        console.log(payload);
+        // console.log(payload);
         state.error = payload;
       })
       .addCase(singIn.pending, (state) => {
         state.error = null;
       })
       .addCase(singIn.fulfilled, (state, { payload }) => {
-        console.log(payload);
+        // console.log(payload);
         state.id = payload.id;
         state.name = payload.name;
         state.email = payload.email;
@@ -45,7 +57,7 @@ export const authSlice = createSlice({
         state.isLogedIn = true;
       })
       .addCase(singIn.rejected, (state, { payload }) => {
-        console.log(payload);
+        // console.log(payload);
         state.error = payload;
       })
       .addCase(singOut.pending, (state) => {
@@ -60,7 +72,9 @@ export const authSlice = createSlice({
         state.isLogedIn = false;
       })
       .addCase(singOut.rejected, (state, { payload }) => {
-        console.log(payload);
+        // console.log(payload);
         state.error = payload;
       }),
 });
+
+export const { refreshUser } = authSlice.actions;

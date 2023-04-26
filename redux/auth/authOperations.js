@@ -44,14 +44,13 @@ export const singIn = createAsyncThunk(
   "auth/SingIn",
   async (credentials, { rejectWithValue }) => {
     try {
-      console.log(credentials);
       const auth = getAuth();
       const { user } = await signInWithEmailAndPassword(
         auth,
         credentials.email,
         credentials.password
       );
-      console.log(user);
+      console.log("SingIn: ", user);
       return {
         id: user.uid,
         name: user.displayName,
