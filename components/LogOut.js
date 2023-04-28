@@ -1,9 +1,13 @@
 import { StyleSheet, Pressable } from "react-native";
+import { useDispatch } from "react-redux";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { singOut } from "../redux/auth/authOperations";
 
 const LogOut = () => {
+  const dispatch = useDispatch()
+
   return (
-    <Pressable onPress={() => alert("Log Out")}>
+    <Pressable onPress={() => dispatch(singOut())}>
       <MaterialIcons
         style={styles.icon}
         name="logout"

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
 import {
   StyleSheet,
   ImageBackground,
@@ -11,9 +13,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Image,
 } from "react-native";
+import { singUp, uploadPhotoToStorage } from "../redux/auth/authOperations";
 
 const RegistrationScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [isFocusedLogin, setIsFocusedLogin] = useState(false);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPass, setIsFocusedPass] = useState(false);
@@ -21,18 +26,34 @@ const RegistrationScreen = ({ navigation }) => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [photo, setPhoto] = useState(null);
+  const [avatar, setAvatar] = useState(null);
 
   const passDisplayToggle = () => setPassDisplay((prevState) => !prevState);
 
   const onSignUp = () => {
-    if (login && email && password) {
-      console.log("login", login, "email:", email, "password:", password);
-      return navigation.navigate("Home");
+    if (!(login && email && password)) {
+          Alert.alert("Please, fill in all fields!");
     }
-    Alert.alert("Please, fill in all fields!");
 
-    navigation.navigate("Home");
+    dispatch(singUp({ login, email, password, avatar }));
   };
+
+  const addAvatar = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log("ImagePicker result:", result);
+
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri);
+      setAvatar(await uploadPhotoToStorage(result.assets[0].uri));
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -44,10 +65,34 @@ const RegistrationScreen = ({ navigation }) => {
           behavior={Platform.OS == "ios" ? "padding" : "heigth"}
         >
           <View style={styles.container}>
-            <View style={styles.fotoWrapper}>
-              <Pressable style={styles.fotoBtn}>
-                <View style={styles.fotoBtnIconV}></View>
-                <View style={styles.fotoBtnIconH}></View>
+            <View style={styles.avatarWrapper}>
+              <Image style={styles.avatarImg} source={{ uri: photo }} />
+              <Pressable
+                style={[
+                  styles.avatarBtn,
+                  { borderColor: photo ? "#E8E8E8" : "#FF6C00" },
+                ]}
+                onPress={addAvatar}
+              >
+                <View
+                  style={[
+                    styles.avatarBtnIconV,
+                    {
+                      backgroundColor: photo ? "#BDBDBD" : "#FF6C00",
+                      transform: [{ rotate: photo ? "45deg" : "0deg" }],
+                    },
+                  ]}
+                ></View>
+                <View
+                  style={[
+                    styles.avatarBtnIconH,
+                    {
+                      backgroundColor: photo ? "#BDBDBD" : "#FF6C00",
+                      transform: [{ rotate: photo ? "45deg" : "0deg" }],
+                    },
+                    ,
+                  ]}
+                ></View>
               </Pressable>
             </View>
             <Text style={styles.title}>Sign up</Text>
@@ -158,7 +203,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     fontFamily: "Roboto-Regular",
   },
-  fotoWrapper: {
+  avatarWrapper: {
     position: "absolute",
     top: -60,
     width: 120,
@@ -166,7 +211,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: "#F6F6F6",
   },
-  fotoBtn: {
+  avatarImg: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+  },
+  avatarBtn: {
     position: "absolute",
     bottom: 14,
     right: -12.5,
@@ -176,15 +226,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 12.5,
     borderWidth: 1,
-    borderColor: "#FF6C00",
+    backgroundColor: "#FFF",
   },
-  fotoBtnIconV: {
+  avatarBtnIconV: {
     position: "absolute",
     width: 13,
     height: 1.5,
     backgroundColor: "#FF6C00",
   },
-  fotoBtnIconH: {
+  avatarBtnIconH: {
     position: "absolute",
     width: 1.5,
     height: 13,

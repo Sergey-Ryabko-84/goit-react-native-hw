@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   FlatList,
   Image,
@@ -7,34 +8,70 @@ import {
   Text,
   View,
 } from "react-native";
+import {
+  collection,
+  doc,
+  increment,
+  onSnapshot,
+  query,
+  updateDoc,
+} from "firebase/firestore";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import User_small from "../assets/images/User_small.png";
+import { selectAuth } from "../redux/auth/authSelectors";
+import { db } from "../firebase/config";
 
-const PostsScreen = ({ route, navigation }) => {
+const PostsScreen = ({ navigation }) => {
+  const { id, name, email, avatar } = useSelector(selectAuth);
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((state) => [...state, route.params]);
-    }
-  }, [route.params]);
+    const queryObj = query(collection(db, "posts"));
+    const unsubscribe = onSnapshot(queryObj, (querySnapshot) => {
+      const postsList = [];
+      querySnapshot.forEach((doc) =>
+        postsList.push({ ...doc.data(), id: doc.id })
+      );
+      setPosts(postsList);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
-  // console.log(posts);
+  const onLikePress = async (item) => {
+    // if (item.userId === id) return;
+
+    if (item.likers.includes(id)) {
+      item.likers = item.likers.filter((likerId) => likerId !== id);
+      const likeRef = doc(db, "posts", item.id);
+      await updateDoc(likeRef, {
+        likesCounter: increment(-1),
+        likers: item.likers,
+      });
+    } else {
+      item.likers.push(id);
+      const likeRef = doc(db, "posts", item.id);
+      await updateDoc(likeRef, {
+        likesCounter: increment(1),
+        likers: item.likers,
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.userContainer}>
-        <Image source={User_small} />
+        <Image source={{ uri: avatar }} style={styles.userImg} />
         <View style={styles.userSignature}>
-          <Text style={styles.userName}>Name</Text>
-          <Text style={styles.userEmail}>Email</Text>
+          <Text style={styles.userName}>{name}</Text>
+          <Text style={styles.userEmail}>{email}</Text>
         </View>
       </View>
       <FlatList
         data={posts}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.postContainer}>
             <View style={styles.imgContainer}>
@@ -44,22 +81,38 @@ const PostsScreen = ({ route, navigation }) => {
             <View style={styles.signatureContainer}>
               <Pressable
                 style={styles.commentsContainer}
-                onPress={() => navigation.navigate("Comments")}
+                onPress={() => navigation.navigate("Comments", item)}
               >
                 <MaterialCommunityIcons
                   name="comment-outline"
                   color="#BDBDBD"
                   size={24}
                 />
-                <Text style={styles.commentsCount}>0</Text>
+                <Text style={styles.commentsCount}>{item.commentCounter}</Text>
               </Pressable>
-              <Pressable style={styles.likesContainer}>
-                <AntDesign name="like2" color="#BDBDBD" size={24} />
-                <Text style={styles.likesCount}>0</Text>
+              <Pressable
+                style={styles.likesContainer}
+                onPress={() => onLikePress(item)}
+                disabled={item.userId === id}
+              >
+                <AntDesign
+                  name="like2"
+                  color={item.likers.includes(id) ? "#FF6C00" : "#BDBDBD"}
+                  size={24}
+                />
+                <Text
+                  style={[
+                    styles.likesCount,
+                    { color: item.likers.includes(id) ? "#212121" : "#BDBDBD" },
+                  ]}
+                >
+                  {item.likesCounter}
+                </Text>
               </Pressable>
               <Pressable
                 style={styles.locationContainer}
                 onPress={() => navigation.navigate("Map", item.location)}
+                disabled={!item.location}
               >
                 <SimpleLineIcons
                   name="location-pin"
@@ -89,6 +142,12 @@ const styles = StyleSheet.create({
     gap: 8,
     height: 60,
     marginBottom: 32,
+  },
+  userImg: {
+    width: 60,
+    height: 60,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
   },
   userSignature: {
     justifyContent: "center",
@@ -145,7 +204,6 @@ const styles = StyleSheet.create({
   likesCount: {
     marginLeft: 6,
     fontSize: 16,
-    color: "#BDBDBD",
   },
   locationContainer: {
     flex: 0,

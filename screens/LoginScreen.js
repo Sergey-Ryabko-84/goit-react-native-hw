@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   ImageBackground,
@@ -12,6 +13,7 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
+import { singIn } from "../redux/auth/authOperations";
 
 const LoginScreen = ({ navigation }) => {
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
@@ -19,15 +21,17 @@ const LoginScreen = ({ navigation }) => {
   const [passDisplay, setPassDisplay] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const passDisplayToggle = () => setPassDisplay((prevState) => !prevState);
 
   const onLogin = () => {
-    if (email && password) {
-      console.log("email:", email, "password:", password);
-      return navigation.navigate("Home");
+    if (!(email && password)) {
+      Alert.alert("Please, fill in all fields!");
     }
-    Alert.alert("Please, fill in all fields!");    
+
+    console.log("email:", email, "password:", password);
+    dispatch(singIn({ email, password }));
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Image,
   Keyboard,
@@ -15,19 +16,23 @@ import {
 import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
+import { addDoc, collection } from "firebase/firestore";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
+import { uploadPhotoToStorage } from "../redux/auth/authOperations";
+import { selectAuth } from "../redux/auth/authSelectors";
+import { db } from "../firebase/config";
 
 const CreatePostsScreen = ({ navigation }) => {
+  const { id, name } = useSelector(selectAuth);
   const [caption, setCaption] = useState("");
   const [locationName, setLocationName] = useState("");
   const [photo, setPhoto] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(CameraType.back);
   const [location, setLocation] = useState(null);
-
 
   useEffect(() => {
     (async () => {
@@ -59,7 +64,29 @@ const CreatePostsScreen = ({ navigation }) => {
     );
   };
 
+  const uploadPostToStorage = async () => {
+    const image = await uploadPhotoToStorage(photo, "photos");
+    try {
+      const postObj = {
+        userId: id,
+        name,
+        caption,
+        locationName,
+        photo: image,
+        commentCounter: 0,
+        likesCounter: 0,
+        likers: [id],
+      };
+      if (location) postObj.location = location.coords;
+      const docRef = await addDoc(collection(db, "posts"), postObj);
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
   const onSubmit = () => {
+    uploadPostToStorage();
     const data = { caption, locationName, photo, location };
     setCaption("");
     setLocationName("");

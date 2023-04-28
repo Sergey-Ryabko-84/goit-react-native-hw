@@ -43,17 +43,25 @@ const Home = ({ navigation }) => {
       <Tabs.Screen
         name="Posts"
         component={PostsScreen}
-        options={{ headerRight: () => <LogOut /> }}
+        options={{
+          headerTitleAlign: "center",
+          headerRight: () => <LogOut />,
+        }}
       />
       <Tabs.Screen
         name="CreatePosts"
         component={CreatePostsScreen}
         options={{
+          headerTitleAlign: "center",
           tabBarStyle: { display: "none" },
           headerLeft: () => <GoBack navigation={navigation} />,
         }}
       />
-      <Tabs.Screen name="Profile" component={ProfileScreen} />
+      <Tabs.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
     </Tabs.Navigator>
   );
 };
