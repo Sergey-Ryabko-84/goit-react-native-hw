@@ -6,6 +6,9 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import uuid from "react-native-uuid";
+import { storage } from "../../firebase/config";
 
 export const singUp = createAsyncThunk(
   "auth/singUp",
@@ -80,6 +83,35 @@ export const singOut = createAsyncThunk(
       console.log("signOut");
     } catch (error) {
       console.log(error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const uploadPhotoToStorage = async (uri, dir) => {
+  const response = await fetch(uri);
+  const file = await response.blob();
+  const imageId = uuid.v4();
+  const storageRef = ref(storage, `${dir}/${imageId}${file._data.name}`);
+  await uploadBytes(storageRef, file).then((snapshot) => {
+    console.log("Uploaded a blob or file!");
+  });
+  const storageUrlPhoto = await getDownloadURL(
+    ref(storage, `${dir}/${imageId}${file._data.name}`)
+  );
+  console.log("storageUrlPhoto:", storageUrlPhoto);
+  return storageUrlPhoto;
+};
+
+export const updateAvatar = createAsyncThunk(
+  "auth/updateAvatar",
+  async (uri, { rejectWithValue }) => {
+    const auth = getAuth();
+    try {
+      const avatar = await uploadPhotoToStorage(uri, "avatar");
+      await updateProfile(auth.currentUser, { photoURL: avatar });
+      return { avatar: auth.currentUser.photoURL };
+    } catch (error) {
       return rejectWithValue(error.message);
     }
   }

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { singIn, singOut, singUp } from "./authOperations";
+import { singIn, singOut, singUp, updateAvatar } from "./authOperations";
 
 const initialState = {
   id: null,
@@ -24,7 +24,7 @@ export const authSlice = createSlice({
       state.token = payload.token;
       state.isLogedIn = true;
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -73,6 +73,16 @@ export const authSlice = createSlice({
       })
       .addCase(singOut.rejected, (state, { payload }) => {
         // console.log(payload);
+        state.error = payload;
+      })
+      .addCase(updateAvatar.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        console.log("updateAvatar payload:", payload);
+        state.avatar = payload.avatar;
+      })
+      .addCase(updateAvatar.rejected, (state, { payload }) => {
         state.error = payload;
       }),
 });
