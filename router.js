@@ -13,16 +13,12 @@ import { refreshUser } from "./redux/auth/authSlice";
 const Stack = createStackNavigator();
 
 const Router = () => {
-  const authState = useSelector(selectAuth);
-  console.log("authState: ", authState);
-
   const { isLogedIn } = useSelector(selectAuth);
   const dispatch = useDispatch();
   const auth = getAuth();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      console.log("onAuthStateChanged user: ", user);
       if (user) {
         const { uid, displayName, email, photoURL, accessToken } = user;
         dispatch(
@@ -38,8 +34,7 @@ const Router = () => {
         console.log("User is signed out");
       }
     });
-  }, [])
-  
+  }, []);
 
   if (!isLogedIn) {
     return (
@@ -64,8 +59,16 @@ const Router = () => {
           component={Home}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="Comments" component={CommentsScreen} />
-        <Stack.Screen name="Map" component={MapScreen} />
+        <Stack.Screen
+          name="Comments"
+          component={CommentsScreen}
+          options={{ headerTitleAlign: "center" }}
+        />
+        <Stack.Screen
+          name="Map"
+          component={MapScreen}
+          options={{ headerTitleAlign: "center" }}
+        />
       </Stack.Navigator>
     );
   }

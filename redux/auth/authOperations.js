@@ -25,7 +25,6 @@ export const singUp = createAsyncThunk(
         photoURL: credentials.avatar,
       });
       const user = auth.currentUser;
-      console.log("singUp user: ", user);
       return {
         id: user.uid,
         name: user.displayName,
@@ -53,7 +52,6 @@ export const singIn = createAsyncThunk(
         credentials.email,
         credentials.password
       );
-      console.log("SingIn: ", user);
       return {
         id: user.uid,
         name: user.displayName,
@@ -80,7 +78,6 @@ export const singOut = createAsyncThunk(
     try {
       const auth = getAuth();
       await signOut(auth);
-      console.log("signOut");
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.message);
@@ -99,7 +96,6 @@ export const uploadPhotoToStorage = async (uri, dir) => {
   const storageUrlPhoto = await getDownloadURL(
     ref(storage, `${dir}/${imageId}${file._data.name}`)
   );
-  console.log("storageUrlPhoto:", storageUrlPhoto);
   return storageUrlPhoto;
 };
 

@@ -35,17 +35,7 @@ const RegistrationScreen = ({ navigation }) => {
     if (!(login && email && password)) {
           Alert.alert("Please, fill in all fields!");
     }
-    console.log(
-      "login",
-      login,
-      "email:",
-      email,
-      "password:",
-      password,
-      "avatar:",
-      avatar
-    );
-    // const avatar = "https://cdn-icons-png.flaticon.com/512/3607/3607444.png";
+
     dispatch(singUp({ login, email, password, avatar }));
   };
 

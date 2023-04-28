@@ -68,12 +68,14 @@ const CreatePostsScreen = ({ navigation }) => {
     const image = await uploadPhotoToStorage(photo, "photos");
     try {
       const postObj = {
-        id,
+        userId: id,
         name,
         caption,
         locationName,
         photo: image,
         commentCounter: 0,
+        likesCounter: 0,
+        likers: [id],
       };
       if (location) postObj.location = location.coords;
       const docRef = await addDoc(collection(db, "posts"), postObj);
